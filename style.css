@@ -1,0 +1,70 @@
+/* Общие стили */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* Заголовок */
+.main-header {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Дисплей таймера */
+.timer-display {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding: 20px 40px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Поле ввода */
+#minutes-input {
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  width: 80px;
+  text-align: center;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+}
+
+/* Кнопки */
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.start {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pause-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.reset-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
