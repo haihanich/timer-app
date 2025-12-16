@@ -37,3 +37,16 @@ function initTimerDisplay() {
 
 // Инициализируем отображение при загрузке страницы
 initTimerDisplay();
+
+// Обновление дисплея при изменении значения в инпуте
+minutesInput.addEventListener('input', function () {
+  const minutesValue = Number(minutesInput.value);
+
+  if (Number.isNaN(minutesValue) || minutesValue < 0) {
+    timerDisplay.textContent = '00:00';
+    return;
+  }
+
+  remainingSeconds = minutesValue * 60;
+  timerDisplay.textContent = formatTime(remainingSeconds);
+});
