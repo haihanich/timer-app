@@ -27,7 +27,7 @@ function initTimerDisplay() {
   timerDisplay.textContent = formatTime(remainingSeconds);
 }
 
-// Синхронизация с инпутом (если таймер не запущен)
+// Синхронизация дисплея с инпутом (если таймер не запущен)
 minutesInput.addEventListener('input', function () {
   if (isRunning) return;
 
@@ -43,11 +43,10 @@ minutesInput.addEventListener('input', function () {
   timerDisplay.textContent = formatTime(remainingSeconds);
 });
 
-// Запуск таймера
+// Start
 startBtn.addEventListener('click', function () {
   if (isRunning) return;
 
-  // Если таймер ещё не был запущен или был сброшен
   if (remainingSeconds <= 0) {
     const minutesValue = Number(minutesInput.value);
 
@@ -77,13 +76,22 @@ startBtn.addEventListener('click', function () {
   }, 1000);
 });
 
-// Пауза таймера
+// Pause
 pauseBtn.addEventListener('click', function () {
   if (!isRunning) return;
 
   clearInterval(intervalId);
   intervalId = null;
   isRunning = false;
+});
+
+// Reset
+resetBtn.addEventListener('click', function () {
+  clearInterval(intervalId);
+  intervalId = null;
+  isRunning = false;
+  remainingSeconds = 0;
+  timerDisplay.textContent = '00:00';
 });
 
 // При загрузке
