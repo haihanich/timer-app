@@ -12,7 +12,8 @@ let remainingSeconds = 0;
 let intervalId = null;
 let isRunning = false;
 
-// Форматирование времени MM:SS
+// ===== Helpers =====
+
 function formatTime(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
@@ -20,79 +21,77 @@ function formatTime(totalSeconds) {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
-// Инициализация дисплея
-function initTimerDisplay() {
-  const minutesValue = Number(minutesInput.value) || 0;
-  remainingSeconds = minutesValue * 60;
+function updateDisplay() {
   timerDisplay.textContent = formatTime(remainingSeconds);
 }
 
-// Синхронизация дисплея с инпутом (если таймер не запущен)
-minutesInput.addEventListener('input', function () {
-  if (isRunning) return;
-
+function getSecondsFromInput() {
   const minutesValue = Number(minutesInput.value);
 
-  if (Number.isNaN(minutesValue) || minutesValue < 0) {
-    remainingSeconds = 0;
-    timerDisplay.textContent = '00:00';
-    return;
+  if (Number.isNaN(minutesValue) || minutesValue <= 0) {
+    return 0;
   }
 
-  remainingSeconds = minutesValue * 60;
-  timerDisplay.textContent = formatTime(remainingSeconds);
-});
+  return minutesValue * 60;
+}
 
-// Start
-startBtn.addEventListener('click', function () {
+// ===== Timer logic =====
+
+function startTimer() {
   if (isRunning) return;
 
   if (remainingSeconds <= 0) {
-    const minutesValue = Number(minutesInput.value);
-
-    if (Number.isNaN(minutesValue) || minutesValue <= 0) {
-      remainingSeconds = 0;
-      timerDisplay.textContent = '00:00';
+    remainingSeconds = getSecondsFromInput();
+    if (remainingSeconds === 0) {
+      updateDisplay();
       return;
     }
-
-    remainingSeconds = minutesValue * 60;
-    timerDisplay.textContent = formatTime(remainingSeconds);
   }
 
   isRunning = true;
+  intervalId = setInterval(tick, 1000);
+}
 
-  intervalId = setInterval(function () {
-    remainingSeconds -= 1;
-    timerDisplay.textContent = formatTime(remainingSeconds);
+function tick() {
+  remainingSeconds -= 1;
+  updateDisplay();
 
-    if (remainingSeconds <= 0) {
-      clearInterval(intervalId);
-      intervalId = null;
-      isRunning = false;
-      timerDisplay.textContent = '00:00';
-      alert('Время вышло!');
-    }
-  }, 1000);
-});
+  if (remainingSeconds <= 0) {
+    stopTimer();
+    alert('Время вышло!');
+  }
+}
 
-// Pause
-pauseBtn.addEventListener('click', function () {
+function pauseTimer() {
   if (!isRunning) return;
+  stopTimer();
+}
 
-  clearInterval(intervalId);
-  intervalId = null;
-  isRunning = false;
-});
-
-// Reset
-resetBtn.addEventListener('click', function () {
-  clearInterval(intervalId);
-  intervalId = null;
-  isRunning = false;
+function resetTimer() {
+  stopTimer();
   remainingSeconds = 0;
-  timerDisplay.textContent = '00:00';
+  updateDisplay();
+}
+
+function stopTimer() {
+  clearInterval(intervalId);
+  intervalId = null;
+  isRunning = false;
+}
+
+// ===== Events =====
+
+minutesInput.addEventListener('input', function () {
+  if (isRunning) return;
+  remainingSeconds = getSecondsFromInput();
+  updateDisplay();
 });
 
-// При загрузке
-initTimerDisplay();
+startBtn.addEventListener('click', startTimer);
+pauseBtn.addEventListener('click', pauseTimer);
+resetBtn.addEventListener('click', resetTimer);
+
+// ===== Init =====
+
+remainingSeconds = getSecondsFromInput();
+updateDisplay();
