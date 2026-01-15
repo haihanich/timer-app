@@ -35,6 +35,12 @@ function getSecondsFromInput() {
   return minutesValue * 60;
 }
 
+function updateButtons() {
+  startBtn.disabled = isRunning;
+  pauseBtn.disabled = !isRunning;
+  resetBtn.disabled = remainingSeconds === 0 && !isRunning;
+}
+
 // ===== Timer logic =====
 
 function startTimer() {
@@ -44,11 +50,13 @@ function startTimer() {
     remainingSeconds = getSecondsFromInput();
     if (remainingSeconds === 0) {
       updateDisplay();
+      updateButtons();
       return;
     }
   }
 
   isRunning = true;
+  updateButtons();
   intervalId = setInterval(tick, 1000);
 }
 
@@ -58,6 +66,9 @@ function tick() {
 
   if (remainingSeconds <= 0) {
     stopTimer();
+    remainingSeconds = 0;
+    updateDisplay();
+    updateButtons();
     alert('Время вышло!');
   }
 }
@@ -65,12 +76,14 @@ function tick() {
 function pauseTimer() {
   if (!isRunning) return;
   stopTimer();
+  updateButtons();
 }
 
 function resetTimer() {
   stopTimer();
   remainingSeconds = 0;
   updateDisplay();
+  updateButtons();
 }
 
 function stopTimer() {
@@ -85,6 +98,7 @@ minutesInput.addEventListener('input', function () {
   if (isRunning) return;
   remainingSeconds = getSecondsFromInput();
   updateDisplay();
+  updateButtons();
 });
 
 startBtn.addEventListener('click', startTimer);
@@ -95,3 +109,4 @@ resetBtn.addEventListener('click', resetTimer);
 
 remainingSeconds = getSecondsFromInput();
 updateDisplay();
+updateButtons();
